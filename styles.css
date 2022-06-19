@@ -1,0 +1,151 @@
+:root {
+    --black-color: #212121;
+    --white-color: #f5f5f5;
+    --hover-color: #ccc;
+}
+
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--black-color);
+    color: var(--white-color);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    height: 100vh;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    place-items: center;
+}
+
+.main-title {
+    margin: 28px 0 56px 0;
+}
+
+.game-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    color: var(--black-color);
+    background-color: var(--white-color);
+    border-radius: 8px;
+}
+
+.tile.x::before,
+.tile.x::after,
+.tile.o::before,
+.tile.o::after {
+    content: '';
+    background-color: var(--black-color);
+    width: 20px;
+    height: 90px;
+    border-radius: 4px;
+    position: absolute;
+}
+
+.tile.x::before {
+    transform: rotate(45deg);
+}
+
+.tile.x::after {
+    transform: rotate(-45deg);
+}
+
+.tile.o::before {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+}
+
+.tile.o::after {
+    background-color: var(--white-color);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.game-container.x-turn .tile:not(.x):not(.o):hover::after,
+.game-container.x-turn .tile:not(.x):not(.o):hover::before {
+    content: '';
+    background-color: var(--hover-color);
+    width: 20px;
+    height: 90px;
+    border-radius: 4px;
+    position: absolute;
+}
+
+.game-container.x-turn .tile:not(.x):not(.o):hover::after {
+    transform: rotate(-45deg);
+}
+
+.game-container.x-turn .tile:not(.x):not(.o):hover::before {
+    transform: rotate(45deg);
+}
+
+.game-container.o-turn .tile:not(.x):not(.o):hover::after,
+.game-container.o-turn .tile:not(.x):not(.o):hover::before {
+    content: '';
+    border-radius: 50%;
+    position: absolute;
+}
+
+.game-container.o-turn .tile:not(.x):not(.o):hover::after {
+    background-color: var(--white-color);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.game-container.o-turn .tile:not(.x):not(.o):hover::before {
+    background-color: var(--hover-color);
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+}
+
+/* END GAME */
+.end-display {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: none;
+    place-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+.display {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.end-message {
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.restart-button {
+    outline: 0;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    border-radius: 8px;
+}
