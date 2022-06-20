@@ -1,12 +1,13 @@
-// This IIFE will treat with everything that is related with the DOM
 const gameBoard = (() => {
     const tilesContainer = document.querySelector('.game-container')
+    const endDisplay = document.querySelector('.end-display')
+
     for (let i = 0; i < 9; i++) {
         const tile = document.createElement('div');
         tile.classList.add('tile')
         tile.setAttribute('id', i)
         tilesContainer.append(tile)
-        tile.addEventListener('click', () => logicGame.selectTile(tile, i), { once: 1 })
+        tile.addEventListener('click', () => logicGame.selectTile(tile), { once: 1 })
     }
 
     const swapTurn = () => {
@@ -16,15 +17,28 @@ const gameBoard = (() => {
         logicGame.oPlayer.status = !logicGame.oPlayer.status
     }
 
+    const displayMessage = () => {
+        const message = document.querySelector('.end-message')
+        const buttonRestart = document.querySelector('.restart-button')
+        endDisplay.classList.add('display')
+
+        if (logicGame.xPlayer.status) {
+            message.textContent = 'X\'s win the game!'
+        } else {
+            message.textContent = 'O\'s win the game!'
+        }
+    }
+
     return {
         tilesContainer,
         swapTurn,
+        displayMessage
     }
 })()
 
 
-// This IIFE will treat with that is related with the logic of the game
 const logicGame = (() => {
+    // Factory Function
     const factoryPlayer = (status) => {
         status: status
         let positions = []
@@ -34,8 +48,8 @@ const logicGame = (() => {
         }
     }
 
-    const xPlayer = factoryPlayer(true)
-    const oPlayer = factoryPlayer(false)
+    let xPlayer = factoryPlayer(true)
+    let oPlayer = factoryPlayer(false)
 
     const winCombinations = [
         [0, 1, 2],
@@ -48,37 +62,27 @@ const logicGame = (() => {
         [2, 4, 6]
     ]
 
-    const selectTile = (tile, index) => {
+    const selectTile = (tile) => {
+        const index = parseInt(tile.getAttribute('id'))
         if (xPlayer.status) {
             tile.classList.add('x')
             xPlayer.positions.push(index)
-            if (xPlayer.positions.length > 2) {
-                checkWin(xPlayer.positions)
-            }
-            console.log(xPlayer.positions)
+            checkWin(xPlayer.positions)
         } else if (oPlayer.status) {
             tile.classList.add('o')
             oPlayer.positions.push(index)
-            if (oPlayer.positions.length > 2) {
-                checkWin(oPlayer.positions)
-            }
-            console.log(oPlayer.positions)
+            checkWin(oPlayer.positions)
         }
-        
         gameBoard.swapTurn()
     }
 
     const checkWin = (positions) => {
-        const won = winCombinations.some(combination => {
+        let gameOver = winCombinations.some(combination => {
             return combination.every(position => positions.includes(position))
         })
-        console.log(won)
-
-        if (won) {
-            console.log('hello')
+        if (gameOver) {
+            gameBoard.displayMessage()
         }
-
-        // displayMessage(xPlayer.status)
     }
 
     return {
